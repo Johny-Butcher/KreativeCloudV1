@@ -1,0 +1,190 @@
+version: '3.8'
+
+services:
+  # MySQL for both NestJS and FTP Virtual Users
+  mysql_db:
+    image: mysql:8.0
+    container_name: hosting_mysql
+    ports:
+      - 3306:3307
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: cloud_platform
+      MYSQL_USER: ftp_admin
+      MYSQL_PASSWORD: ftp_password
+    volumes:
+      - ./mysql-init:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - hosting_net
+
+  # MongoDB for Analytics/Logs
+  mongo_db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    container_name: hosting_mongo
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      # Use 'test' instead of 'mongosh' directly to ensure the exit code is captured correctly
+      test: mongosh --quiet --eval "db.adminCommand('ping').ok" localhost:27017/test
+      interval: 30s     # Check every 30 seconds instead of 5 (less log noise)
+      timeout: 10s
+      retries: 3
+      start_period: 40s # Ignore failures for the first 40s while Mongo boots
+    networks:
+      - hosting_net
+
+  # Pure-FTPd Server
+  betterftp:
+    container_name: betterftp
+    # Místo lokálního sestavování (build: .) řekneme Dockeru, ať stáhne hotový image
+    image: ghcr.io/tobankovichujovinky/betterftp:latest
+    # image: ghcr.io/tobankovichujovinky/betterftp:sha-4ed8bda # Nebo konkrétní verze
+    restart: unless-stopped
+    ports:
+      - "2121:2121"         # FTP Control Port
+      - "7000-7100:7000-7100" # Passive Data Ports
+    environment:
+      - PORT=2121
+      - PASV_MIN=7000
+      - PASV_MAX=7100
+      - PASV_URL=127.0.0.1
+      - MAX_CONNECTIONS=100
+      - IDLE_TIMEOUT=30000
+      - ENABLE_ANONYMOUS=false
+      - LOG_LEVEL=debug
+      
+      # Hashing Algorithm (bcrypt, plain)
+      - AUTH_HASHING=bcrypt
+      # Authentication Configuration
+      # --- JSON ---
+      # - AUTH_DRIVER=json
+      # - JSON_PATH=/app/users.json
+
+      # --- SQLite ---
+      - AUTH_DRIVER=mysql
+      - DB_CONNECTION=mysql://root:root_password@mysql_db:3306/cloud_platform
+      - DB_TABLE=User
+      - DB_COL_USER=username
+      - DB_COL_PASS=password
+      - DB_COL_HOME=directory
+      
+      # TLS Configuration (Uncomment and mount certs to enable)
+      # - TLS_ENABLED=false
+      # - TLS_KEY_PATH=/app/certs/key.pem
+      # - TLS_CERT_PATH=/app/certs/cert.pem
+      
+    volumes:
+      # Mount a data directory where user home folders live
+      - projects_data:/var/www/projects
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+    networks:
+      - hosting_net
+
+  # Backend Management API (NestJS)
+  api:
+    build: ./backend
+    container_name: nestjs_api
+    environment:
+      - MYSQL_HOST=mysql_db
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASS=root_password
+      - MYSQL_DB=cloud_platform
+      - MONGO_URI=mongodb://mongo_db:27017/analytics
+      - API_SHARED_SECRET=${API_SECRET}
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+      mongo_db:
+        condition: service_healthy
+    volumes:
+      - projects_data:/var/www/projects # NestJS creates files here
+      - ./templates:/templates
+    networks:
+      - hosting_net
+
+  # Frontend Dashboard (Next.js)
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - NEXT_PUBLIC_SITEURL=${SITE_URL}
+    container_name: nextjs_web
+    environment:
+      - BASE_URL=http://api:3000
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - AUTH_SECRET=${AUTH_SECRET}
+      - AUTH_URL=${SITE_URL}
+      - NEXT_PUBLIC_SITEURL=${SITE_URL}
+      - API_SHARED_SECRET=${API_SECRET}
+    depends_on:
+      - api
+    networks:
+      - hosting_net
+
+  # Reverse Proxy (Nginx)
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - projects_data:/var/www/projects
+    depends_on:
+      - frontend
+      - api
+    networks:
+      - hosting_net
+
+  # Cloudflare Tunnel
+  tunnel:
+    image: cloudflare/cloudflared
+    container_name: cloudflare_tunnel
+    command: tunnel --no-autoupdate run --token ${CF_TUNNEL_TOKEN}
+    depends_on:
+      - nginx
+    networks:
+      - hosting_net
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: hosting_pma
+    environment:
+      - PMA_ABSOLUTE_URI=${SITE_URL}/pma/
+      - PMA_HOST=mysql_db
+      - PMA_HTTPS=true
+    networks:
+      - hosting_net
+
+  php_fpm:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    container_name: php_fpm
+    volumes:
+      - projects_data:/var/www/projects
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    networks:
+      - hosting_net
+
+networks:
+  hosting_net:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  mongo_data:
+  projects_data:
+    driver: local

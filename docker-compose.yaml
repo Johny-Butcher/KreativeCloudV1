@@ -26,8 +26,6 @@ services:
   # MongoDB for Analytics/Logs
   mongo_db:
     image: mongo:latest
-    ports:
-      - "27017:27017"
     container_name: hosting_mongo
     volumes:
       - mongo_data:/data/db
@@ -137,8 +135,6 @@ services:
   nginx:
     image: nginx:alpine
     container_name: nginx_proxy
-    ports:
-      - "80:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - projects_data:/var/www/projects

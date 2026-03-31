@@ -1,18 +1,17 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
-import { AchangePass, AcreateDBUser } from '@/services/actions/Actions';
+import { useState } from 'react';
+import { AchangePass } from '@/services/actions/Actions';
 
 export default function ChangePass() {
     const [submitted, setSubmitted] = useState(false);
 
     const handleSubmit = async (event: FormData) => {
         setSubmitted(true);
-
         try {
             await AchangePass(event);
         } catch (error) {
-            console.error('Error creating user:', error);
+            console.error('Error changing password:', error);
         } finally {
             setSubmitted(false);
             window.location.reload();
@@ -20,22 +19,20 @@ export default function ChangePass() {
     };
 
     return (
-        <div className="flex items-center m-4 justify-center gap-4">
-            <form className="flex items-center gap-4" action={handleSubmit}>
-                <h1 className="text-xl font-bold">Change Password</h1>
-                <input
-                    className="border-4 border-blue-600 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    type="password"
-                    name="newPass"
-                />
-                <button
-                    type="submit"
-                    disabled={submitted}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                >
-                    {submitted ? 'Changing...' : 'Change Password'}
-                </button>
-            </form>
-        </div>
+        <form className="flex gap-3" action={handleSubmit}>
+            <input
+                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                type="password"
+                name="newPass"
+                placeholder="New password"
+            />
+            <button
+                type="submit"
+                disabled={submitted}
+                className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 rounded-lg transition-colors"
+            >
+                {submitted ? 'Updating...' : 'Update'}
+            </button>
+        </form>
     );
 }

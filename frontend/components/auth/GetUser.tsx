@@ -5,9 +5,16 @@ export default async function GetUser() {
     const session = await auth();
     return (
         <>
-            {session?.user && <Image className=" rounded-full" src={`${session?.user?.image}`} alt="ProfilePicture" width={35} height={35} />}
-            <h1>{session?.user?.name}</h1>
-
+            {session?.user?.image && (
+                <Image
+                    className="rounded-full flex-shrink-0"
+                    src={session.user.image}
+                    alt="Profile"
+                    width={32}
+                    height={32}
+                />
+            )}
+            <span className="text-sm font-medium text-gray-700 truncate">{session?.user?.name}</span>
         </>
-    )
+    );
 }

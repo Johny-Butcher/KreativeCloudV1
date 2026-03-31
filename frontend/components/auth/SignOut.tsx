@@ -5,11 +5,11 @@ export function SignOut() {
         <form
             action={async () => {
                 "use server"
-                await signOut()
+                await signOut();
             }}
         >
-            <button type="submit" className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400">
-                Sign Out
+            <button type="submit" className="inline-flex items-center px-4 py-2 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors">
+                Sign out
             </button>
         </form>
     );

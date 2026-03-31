@@ -1,32 +1,33 @@
 import { auth } from "@/auth";
 import Image from "next/image";
+import { SignOut } from "@/components/auth/SignOut";
 
 export default async function GetSession() {
     const session = await auth();
-    //console.log(session);
 
     return (
-        <div className="flex flex-col items-center justify-center m-16 bg-gray-100 rounded-md p-10 shadow-md">
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
             {session?.user ? (
-                <>
-                    <h1 className="text-3xl font-bold text-blue-600">
-                        {session?.user?.name}
-                    </h1>
-                    <div className="mt-4">
-                        <Image
-                            src={`${session?.user?.image}`}
-                            alt="ProfilePicture"
-                            width={100}
-                            height={100}
-                            className="rounded-full"
-                        />
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        {session.user.image && (
+                            <Image
+                                src={session.user.image}
+                                alt="Profile"
+                                width={56}
+                                height={56}
+                                className="rounded-full"
+                            />
+                        )}
+                        <div>
+                            <h1 className="text-lg font-semibold text-gray-900">{session.user.name}</h1>
+                            <p className="text-sm text-gray-500">{session.user.email}</p>
+                        </div>
                     </div>
-                    <h2 className="text-xl font-bold text-blue-600 mt-4">
-                        {session?.user?.email}
-                    </h2>
-                </>
+                    <SignOut />
+                </div>
             ) : (
-                <p>Loading session...</p>
+                <p className="text-sm text-gray-500">Loading session...</p>
             )}
         </div>
     );

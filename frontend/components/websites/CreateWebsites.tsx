@@ -8,11 +8,10 @@ export default function CreateWebsites() {
 
     const handleSubmit = async (event: FormData) => {
         setSubmitted(true);
-
         try {
             await AcreateWeb(event);
         } catch (error) {
-            console.error('Error creating user:', error);
+            console.error('Error creating site:', error);
         } finally {
             setSubmitted(false);
             window.location.reload();
@@ -20,28 +19,26 @@ export default function CreateWebsites() {
     };
 
     return (
-        <div>
-            <form className="flex items-center gap-4" action={handleSubmit}>
-                <h1 className="text-xl font-bold">Website Name:</h1>
-                <input
-                    className="border-4 border-blue-600 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    type="text"
-                    name="subdomain"
-                />
-                <h1 className="text-xl font-bold">Password:</h1>
-                <input
-                    className="border-4 border-blue-600 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    type="password"
-                    name="pass"
-                />
-                <button
-                    type="submit"
-                    disabled={submitted}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                >
-                    {submitted ? "Creating..." : "Create Website"}
-                </button>
-            </form>
-        </div>
+        <form className="flex flex-col sm:flex-row gap-3" action={handleSubmit}>
+            <input
+                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                type="text"
+                name="subdomain"
+                placeholder="Site name (e.g. mysite)"
+            />
+            <input
+                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                type="password"
+                name="pass"
+                placeholder="FTP password"
+            />
+            <button
+                type="submit"
+                disabled={submitted}
+                className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 rounded-lg transition-colors"
+            >
+                {submitted ? 'Creating...' : 'Create Site'}
+            </button>
+        </form>
     );
 }

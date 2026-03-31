@@ -3,50 +3,51 @@ export default function TermsAndConditions() {
         <div className="container mx-auto px-4 py-8">
             <h1 className="text-4xl font-bold mb-6">Terms and Conditions</h1>
             <div className="text-gray-700 space-y-4">
-                <p>Welcome to the Internal School App. This application is designed for the hosting and management of web apps, databases, and other related activities. By accessing and using this app, you agree to comply with and be bound by the following terms and conditions. Please read them carefully.</p>
+                <p>Welcome to <strong>KreativeCloud</strong>. This platform is a personal development project designed for hosting and managing web apps and databases. By accessing this service, you acknowledge its experimental nature and agree to the following terms.</p>
 
                 <h2 className="text-2xl font-semibold mt-6">1. Acceptance of Terms</h2>
-                <p>By accessing and using this app, you agree to these terms and conditions in full. If you disagree with any part of these terms and conditions, you must not use this app.</p>
+                <p>By using this platform, you agree to these terms in full. If you disagree with any part, you must cease use of the service immediately.</p>
 
-                <h2 className="text-2xl font-semibold mt-6">2. Use of the App</h2>
-                <p>The app is intended for authorized users only, including students, faculty, and staff. Users must use the app in accordance with school policies and applicable laws. Unauthorized use of this app may result in disciplinary action.</p>
+                <h2 className="text-2xl font-semibold mt-6">2. Development & Showcase Status</h2>
+                <p>
+                    <strong>This is a development project and a technical showcase.</strong> It is not a commercial-grade hosting provider. The service is provided &quot;as-is&quot; and may be taken offline, modified, or reset at any time without prior notice for maintenance or development purposes.
+                </p>
 
-                <h2 className="text-2xl font-semibold mt-6">3. User Accounts</h2>
-                <p>Users may be required to create an account to access certain features. Users are responsible for maintaining the confidentiality of their account information and password. Users must immediately notify the school administration of any unauthorized use of their account.</p>
+                <h2 className="text-2xl font-semibold mt-6">3. User Accounts & Security</h2>
+                <p>Users are responsible for maintaining the confidentiality of their account credentials. You must notify the administrator immediately if you suspect any unauthorized access to your account.</p>
 
-                <h2 className="text-2xl font-semibold mt-6">4. Hosting and Management of Web Apps and Databases</h2>
-                <p>Users are permitted to host and manage web apps and databases as part of their educational activities. All hosted content must comply with school policies, including but not limited to content standards and intellectual property rights. The school reserves the right to review and remove any content that violates policies or is deemed inappropriate.</p>
+                <h2 className="text-2xl font-semibold mt-6">4. Hosting & Content Responsibility</h2>
+                <p>
+                    You are permitted to host web apps and databases. You retain ownership of your content, but you grant this platform the right to host it.
+                    <strong>All hosted content must be legal.</strong> We reserve the right to remove any content that is deemed harmful, illegal, or places an excessive load on the server.
+                </p>
 
-                <h2 className="text-2xl font-semibold mt-6">5. Data Privacy</h2>
-                <p>The school is committed to protecting the privacy of users and their data. Personal information collected through the app will be used in accordance with the school&apos;s privacy policy. Users should not share sensitive or confidential information through the app unless necessary and authorized.</p>
+                <h2 className="text-2xl font-semibold mt-6">5. Data Loss & Backups</h2>
+                <p>
+                    <strong>We provide no guarantee of data persistence.</strong> Because this is a development environment, databases or files may be wiped during updates. Users are 100% responsible for maintaining their own external backups of all code and data.
+                </p>
 
                 <h2 className="text-2xl font-semibold mt-6">6. Prohibited Activities</h2>
                 <p>Users must not:</p>
-                <ul className="list-disc list-inside">
-                    <li>Engage in any activity that disrupts or interferes with the app&apos;s functionality.</li>
-                    <li>Use the app for any illegal or unauthorized purpose.</li>
-                    <li>Upload or distribute any harmful or malicious software.</li>
+                <ul className="list-disc list-inside ml-4">
+                    <li>Engage in activities that disrupt the platform’s stability (e.g., DDoS, crypto mining).</li>
+                    <li>Use the platform for phishing, malware distribution, or illegal activities.</li>
+                    <li>Attempt to bypass security measures or access other users&apos; data.</li>
                 </ul>
 
-                <h2 className="text-2xl font-semibold mt-6">7. Intellectual Property</h2>
-                <p>The app and its original content, features, and functionality are owned by the school. Users must not reproduce, duplicate, copy, sell, or exploit any portion of the app without express written permission from the school.</p>
+                <h2 className="text-2xl font-semibold mt-6">7. Limitation of Liability</h2>
+                <p>
+                    To the maximum extent permitted by law, the developer of this platform is not liable for any direct, indirect, or incidental damages, including but not limited to <strong>loss of data, loss of profits, or service downtime</strong>, resulting from the use of this project.
+                </p>
 
-                <h2 className="text-2xl font-semibold mt-6">8. Limitation of Liability</h2>
-                <p>The app is provided &quot;as is&quot; and &quot;as available&quot; without warranties of any kind, either express or implied. The school does not warrant that the app will be uninterrupted, error-free, or free of viruses or other harmful components. The school is not liable for any direct, indirect, incidental, or consequential damages arising from the use of or inability to use the app.</p>
+                <h2 className="text-2xl font-semibold mt-6">8. Termination</h2>
+                <p>We reserve the right to suspend or terminate access to any user at our sole discretion, especially in cases of resource abuse or violation of these terms.</p>
 
-                <h2 className="text-2xl font-semibold mt-6">9. Termination</h2>
-                <p>The school reserves the right to suspend or terminate access to the app at any time, without notice, for conduct that violates these terms and conditions or is otherwise deemed harmful to the school or other users.</p>
+                <h2 className="text-2xl font-semibold mt-6">9. Contact Information</h2>
+                <p>For questions or to report issues, please contact the administrator at me@johny.codes.</p>
 
-                <h2 className="text-2xl font-semibold mt-6">10. Changes to Terms and Conditions</h2>
-                <p>The school reserves the right to modify these terms and conditions at any time. Users will be notified of any significant changes through the app or via email.</p>
-
-                <h2 className="text-2xl font-semibold mt-6">11. Governing Law</h2>
-                <p>These terms and conditions are governed by and construed in accordance with the laws of the school&apos;s jurisdiction.</p>
-
-                <h2 className="text-2xl font-semibold mt-6">12. Contact Information</h2>
-                <p>For any questions or concerns about these terms and conditions, please contact the school administration at [Contact Information].</p>
-
-                <p>By using the Internal School App, you acknowledge that you have read, understood, and agree to be bound by these terms and conditions.</p>
+                <hr className="my-8 border-gray-300" />
+                <p className="italic">By using this platform, you acknowledge that you understand this is a showcase project and not a high-availability production environment.</p>
             </div>
         </div>
     );

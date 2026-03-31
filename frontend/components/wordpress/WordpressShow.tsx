@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { AdeleteDB, AwordpressDel } from '@/services/actions/Actions';
+import { AwordpressDel } from '@/services/actions/Actions';
 
 export default function WordpressShow({ wordpress }: any) {
     const url = process.env.NEXT_PUBLIC_SITEURL;
@@ -14,7 +14,7 @@ export default function WordpressShow({ wordpress }: any) {
         try {
             await AwordpressDel(subdomainToDelete);
         } catch (error) {
-            console.error('Error deleting wordpress:', error);
+            console.error('Error deleting WordPress site:', error);
         } finally {
             setDis(false);
             setShowModal(false);
@@ -22,63 +22,71 @@ export default function WordpressShow({ wordpress }: any) {
         }
     };
 
-    const openInNewTab = (url: string) => {
-        window.open(url, '_blank', 'noopener,noreferrer');
-    };
-
     const handleDeleteClick = (subdomain: string) => {
         setSubdomainToDelete(subdomain);
         setShowModal(true);
     };
 
-    return (
-        <div className="flex flex-col justify-center gap-4">
-            {wordpress.map((item: any) => (
-                <div
-                    key={item._id}
-                    className="bg-gray-100 m-2 rounded-md p-4 shadow-md flex items-center justify-between"
-                >
-                    <span className="font-medium">{item.subdomain.split("/")[1]}</span>
-                    <div className="flex gap-4">
-                        <button
-                            onClick={() => openInNewTab(`${url}/projects/${item.subdomain}`)}
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md ml-2"
-                        >
-                            Open
-                        </button>
-                        <button
-                            onClick={() => handleDeleteClick(item.subdomain)}
-                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md"
-                        >
-                            Delete
-                        </button>
-                    </div>
-                </div>
-            ))}
+    if (!wordpress?.length) {
+        return <p className="text-sm text-gray-500">No WordPress sites yet. Create one above.</p>;
+    }
 
-            {/* Modal */}
-            {showModal && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                    <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-                        <h2 className="text-xl font-bold mb-4">Confirm Delete</h2>
-                        <p className="mb-4">Are you sure you want to delete {subdomainToDelete}?</p>
-                        <div className="flex justify-end gap-4">
-                            <button
-                                onClick={() => setShowModal(false)}
-                                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-md"
+    return (
+        <>
+            <div className="space-y-3">
+                {wordpress.map((item: any) => (
+                    <div
+                        key={item._id}
+                        className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3 border border-gray-100"
+                    >
+                        <span className="text-sm font-medium text-gray-800">{item.subdomain.split('/')[1]}</span>
+                        <div className="flex items-center gap-2">
+                            <a
+                                href={`${url}/projects/${item.subdomain}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors"
                             >
-                                Cancel
-                            </button>
+                                Open
+                            </a>
                             <button
-                                onClick={handleSubmit}
-                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md"
+                                onClick={() => handleDeleteClick(item.subdomain)}
+                                className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
                             >
                                 Delete
                             </button>
                         </div>
                     </div>
+                ))}
+            </div>
+
+            {showModal && (
+                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
+                    <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-sm mx-4">
+                        <h2 className="text-lg font-semibold text-gray-900 mb-2">Delete WordPress Site?</h2>
+                        <p className="text-sm text-gray-500 mb-6">
+                            This will permanently delete{' '}
+                            <span className="font-medium text-gray-700">{subdomainToDelete.split('/')[1]}</span>.
+                            This action cannot be undone.
+                        </p>
+                        <div className="flex gap-3 justify-end">
+                            <button
+                                onClick={() => setShowModal(false)}
+                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleSubmit}
+                                disabled={dis}
+                                className="px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 disabled:opacity-50 rounded-lg transition-colors"
+                            >
+                                {dis ? 'Deleting...' : 'Delete'}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
-        </div>
+        </>
     );
 }

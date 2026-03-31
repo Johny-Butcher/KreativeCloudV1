@@ -25,17 +25,10 @@ services:
 
   # MongoDB for Analytics/Logs
   mongo_db:
-    image: mongo:latest
+    image: mongo:6.0-focal  # Stable, fixes 139 crashes
     container_name: hosting_mongo
     volumes:
       - mongo_data:/data/db
-    healthcheck:
-      # Use 'test' instead of 'mongosh' directly to ensure the exit code is captured correctly
-      test: mongosh --quiet --eval "db.adminCommand('ping').ok" localhost:27017/test
-      interval: 30s     # Check every 30 seconds instead of 5 (less log noise)
-      timeout: 10s
-      retries: 3
-      start_period: 40s # Ignore failures for the first 40s while Mongo boots
     networks:
       - hosting_net
 
@@ -43,7 +36,7 @@ services:
   betterftp:
     container_name: betterftp
     # Místo lokálního sestavování (build: .) řekneme Dockeru, ať stáhne hotový image
-    image: ghcr.io/tobankovichujovinky/betterftp:latest
+    image: ghcr.io/zajimavechujovinky/betterftp:latest
     # image: ghcr.io/tobankovichujovinky/betterftp:sha-4ed8bda # Nebo konkrétní verze
     restart: unless-stopped
     ports:
@@ -103,8 +96,6 @@ services:
     depends_on:
       mysql_db:
         condition: service_healthy
-      mongo_db:
-        condition: service_healthy
     volumes:
       - projects_data:/var/www/projects # NestJS creates files here
       - ./templates:/templates
@@ -113,6 +104,8 @@ services:
 
   # Frontend Dashboard (Next.js)
   frontend:
+    ports:
+      - "80:80"
     build:
       context: ./frontend
       args:

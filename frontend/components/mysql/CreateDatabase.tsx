@@ -8,11 +8,10 @@ export default function CreateDatabase() {
 
     const handleSubmit = async (event: FormData) => {
         setSubmitted(true);
-
         try {
             await AcreateDB(event);
         } catch (error) {
-            console.error('Error creating user:', error);
+            console.error('Error creating database:', error);
         } finally {
             setSubmitted(false);
             window.location.reload();
@@ -20,22 +19,20 @@ export default function CreateDatabase() {
     };
 
     return (
-        <div className="flex items-center m-4 justify-center gap-4">
-            <form className="flex items-center gap-4" action={handleSubmit}>
-                <h1 className="text-xl font-bold">Database Name</h1>
-                <input
-                    className="border-4 border-blue-600 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    type="text"
-                    name="databaseName"
-                />
-                <button
-                    type="submit"
-                    disabled={submitted}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 hover:shadow-lg transition-shadow duration-300"
-                >
-                    {submitted ? 'Creating...' : 'Create Database'}
-                </button>
-            </form>
-        </div>
+        <form className="flex gap-3" action={handleSubmit}>
+            <input
+                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                type="text"
+                name="databaseName"
+                placeholder="Database name"
+            />
+            <button
+                type="submit"
+                disabled={submitted}
+                className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 rounded-lg transition-colors"
+            >
+                {submitted ? 'Creating...' : 'Create'}
+            </button>
+        </form>
     );
 }

@@ -31,46 +31,56 @@ export default function ShowDatabases({ databases }: any) {
         setShowModal(true);
     };
 
-    return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {databases.map((item: Database) => (
-                <div
-                    key={item._id}
-                    className="bg-gray-100 rounded-md p-4 shadow-md flex items-center justify-between"
-                >
-                    <span className="font-medium mr-1">{item.databaseName}</span>
-                    <button
-                        onClick={() => handleDeleteClick(item.databaseName)}
-                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md"
-                    >
-                        Delete
-                    </button>
-                </div>
-            ))}
+    if (!databases?.length) {
+        return <p className="text-sm text-gray-500">No databases yet. Create one above.</p>;
+    }
 
-            {/* Modal */}
+    return (
+        <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {databases.map((item: Database) => (
+                    <div
+                        key={item._id}
+                        className="flex items-center justify-between bg-gray-50 rounded-lg px-4 py-3 border border-gray-100"
+                    >
+                        <span className="text-sm font-medium text-gray-800">{item.databaseName}</span>
+                        <button
+                            onClick={() => handleDeleteClick(item.databaseName)}
+                            className="text-sm font-medium text-red-500 hover:text-red-700 transition-colors ml-3"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                ))}
+            </div>
+
             {showModal && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                    <div className="bg-white rounded-lg shadow-lg p-6 w-96">
-                        <h2 className="text-xl font-bold mb-4">Confirm Delete</h2>
-                        <p className="mb-4">Are you sure you want to delete {databaseToDelete}?</p>
-                        <div className="flex justify-end gap-4">
+                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
+                    <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-sm mx-4">
+                        <h2 className="text-lg font-semibold text-gray-900 mb-2">Delete Database?</h2>
+                        <p className="text-sm text-gray-500 mb-6">
+                            This will permanently delete{' '}
+                            <span className="font-medium text-gray-700">{databaseToDelete}</span>.
+                            This action cannot be undone.
+                        </p>
+                        <div className="flex gap-3 justify-end">
                             <button
                                 onClick={() => setShowModal(false)}
-                                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-md"
+                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg transition-colors"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleSubmit}
-                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md"
+                                disabled={submitted}
+                                className="px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 disabled:opacity-50 rounded-lg transition-colors"
                             >
-                                Delete
+                                {submitted ? 'Deleting...' : 'Delete'}
                             </button>
                         </div>
                     </div>
                 </div>
             )}
-        </div>
+        </>
     );
 }

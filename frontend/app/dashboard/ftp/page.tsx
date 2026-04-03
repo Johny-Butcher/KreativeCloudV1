@@ -14,7 +14,10 @@ export default async function FTPSites() {
             </div>
 
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-                <h2 className="text-sm font-semibold text-gray-700 mb-4">New FTP Site</h2>
+                <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-sm font-semibold text-gray-700">New FTP Site</h2>
+                    <span className="text-sm font-medium text-gray-400">{sites?.length ?? 0}<span className="text-gray-300">/5</span></span>
+                </div>
                 <CreateWebsites />
             </div>
 

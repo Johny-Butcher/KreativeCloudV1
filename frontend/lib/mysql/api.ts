@@ -126,7 +126,8 @@ export async function CreateDB(databaseName: string | undefined) {
     }
     console.log("data importnat", data)
     try {
-        await axiosInstance.post("mysql/createDatabase", data)
+        const response = await axiosInstance.post("mysql/createDatabase", data)
+        return response;
     } catch (error) {
         console.error('Error:', error);
         return null; // Return null or handle the error as needed

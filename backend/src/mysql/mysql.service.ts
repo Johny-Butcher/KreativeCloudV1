@@ -114,8 +114,15 @@ export class MysqlService {
         const connection = await this.getConnection();
 
         const user = await this.mysqlModel.findOne({ id: data.id });
+
+        if (user && user.databases.length >= 5) {
+            await connection.end();
+            return { limitReached: true };
+        }
+
         if (user && user.databases.some(db => db.databaseName === data.databaseName)) {
             console.log("Database already exists for this user.");
+            await connection.end();
             return; // Exit the function early if the database already exists
         }
         //const dbName = `${data.username}_${data.databaseName}`;

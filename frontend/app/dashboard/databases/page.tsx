@@ -46,7 +46,11 @@ export default async function Databases() {
                 <div className="space-y-6">
                     <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
                         <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Connection Details</h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div className="bg-gray-50 rounded-lg p-3">
+                                <p className="text-xs text-gray-500 mb-1">Host</p>
+                                <p className="font-mono text-sm font-medium text-gray-900">dbcloudv1.johny.codes</p>
+                            </div>
                             <div className="bg-gray-50 rounded-lg p-3">
                                 <p className="text-xs text-gray-500 mb-1">Username</p>
                                 <p className="font-mono text-sm font-medium text-gray-900">{username}</p>
@@ -60,7 +64,10 @@ export default async function Databases() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-                            <h2 className="text-sm font-semibold text-gray-700 mb-4">Create Database</h2>
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-sm font-semibold text-gray-700">Create Database</h2>
+                                <span className="text-sm font-medium text-gray-400">{databases?.length ?? 0}<span className="text-gray-300">/5</span></span>
+                            </div>
                             <CreateDatabase />
                         </div>
                         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">

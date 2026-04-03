@@ -36,7 +36,8 @@ services:
   betterftp:
     container_name: betterftp
     # Místo lokálního sestavování (build: .) řekneme Dockeru, ať stáhne hotový image
-    image: ghcr.io/zajimavechujovinky/betterftp:latest
+    #image: ghcr.io/zajimavechujovinky/betterftp:latest
+    image: ftpb:v3
     # image: ghcr.io/tobankovichujovinky/betterftp:sha-4ed8bda # Nebo konkrétní verze
     restart: unless-stopped
     ports:
@@ -66,7 +67,8 @@ services:
       - DB_COL_USER=username
       - DB_COL_PASS=password
       - DB_COL_HOME=directory
-      
+      - QUOTA_MAX_FILE_SIZE=104857600   # 100 MB per file
+      - QUOTA_MAX_TOTAL_SIZE=1073741824 # 1 GB total per user
       # TLS Configuration (Uncomment and mount certs to enable)
       # - TLS_ENABLED=false
       # - TLS_KEY_PATH=/app/certs/key.pem
@@ -104,8 +106,6 @@ services:
 
   # Frontend Dashboard (Next.js)
   frontend:
-    ports:
-      - "80:80"
     build:
       context: ./frontend
       args:
@@ -177,3 +177,9 @@ volumes:
   mongo_data:
   projects_data:
     driver: local
+  tmpfs_vol:
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: size=20g

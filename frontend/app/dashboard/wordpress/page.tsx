@@ -14,7 +14,10 @@ export default async function Wordpress() {
             </div>
 
             <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-                <h2 className="text-sm font-semibold text-gray-700 mb-4">New WordPress Site</h2>
+                <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-sm font-semibold text-gray-700">New WordPress Site</h2>
+                    <span className="text-sm font-medium text-gray-400">{press?.length ?? 0}<span className="text-gray-300">/5</span></span>
+                </div>
                 <CreateWordpress />
             </div>
 

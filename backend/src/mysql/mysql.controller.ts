@@ -15,8 +15,11 @@ export class MysqlController {
 
     @Post('createDatabase')
     async createDatabase(@Body() data: CreateDatabasedto) {
-        await this.mysqlService.createDatabase(data);
-        return { message: "bla bla" };
+        const result = await this.mysqlService.createDatabase(data);
+        if (result?.limitReached) {
+            return result;
+        }
+        return { message: "created" };
     }
 
     @Post('deleteDatabase')

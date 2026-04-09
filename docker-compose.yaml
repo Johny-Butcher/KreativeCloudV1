@@ -37,7 +37,7 @@ services:
     container_name: betterftp
     # Místo lokálního sestavování (build: .) řekneme Dockeru, ať stáhne hotový image
     #image: ghcr.io/zajimavechujovinky/betterftp:latest
-    image: ftpb:v3
+    image: ghcr.io/zajimavechujovinky/betterftp:latest
     # image: ghcr.io/tobankovichujovinky/betterftp:sha-4ed8bda # Nebo konkrétní verze
     restart: unless-stopped
     ports:

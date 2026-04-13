@@ -5,7 +5,7 @@ import Footer from "@/components/ui/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const BASE_URL = "https://johny.codes";
+const BASE_URL = "https://cloudv1.johny.codes/";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     "open source hosting",
     "KreativeCloud",
   ],
-  authors: [{ name: "Jan Zedník", url: BASE_URL }],
+  authors: [{ name: "Jan Zedník", url: "https://johny.codes/" }],
   creator: "Jan Zedník",
   publisher: "Jan Zedník",
   robots: {
@@ -88,7 +88,7 @@ const jsonLd = {
   author: {
     "@type": "Person",
     name: "Jan Zedník",
-    url: BASE_URL,
+    url: "https://johny.codes/",
   },
   featureList: [
     "One-click WordPress deployment",
